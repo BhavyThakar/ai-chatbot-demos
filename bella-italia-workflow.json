@@ -1,0 +1,140 @@
+{
+  "name": "Bella Italia — AI Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bella-italia-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "bella-italia-chat"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "userMessage",
+              "value": "={{ $json.body.message }}"
+            },
+            {
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-node",
+      "name": "Extract Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "type": "system",
+              "message": "You are Sofia, the friendly and warm AI assistant for Bella Italia — an authentic Italian restaurant in Little Italy, Manhattan, New York City.\n\nYour job is to help customers with:\n\n1. RESERVATIONS\n   - We accept bookings via phone: (555) 014-2233\n   - Walk-ins welcome but reservations recommended on weekends\n   - Private dining available for groups of 10+\n\n2. OPENING HOURS\n   - Monday to Thursday: 11:00 AM – 10:00 PM\n   - Friday & Saturday: 11:00 AM – 11:00 PM\n   - Sunday: 12:00 PM – 9:00 PM\n\n3. LOCATION & TRANSPORT\n   - 123 Mulberry Street, Little Italy, Manhattan, NYC\n   - 5-minute walk from Canal Street subway (A, C, E, J, N, Q, R, Z, 6 trains)\n   - Street parking available on Mulberry and Grand Street\n\n4. MENU HIGHLIGHTS\n   - Handmade pasta: Tagliatelle al Ragù, Cacio e Pepe, Carbonara, Seafood Linguine ($18–$28)\n   - Wood-fired pizzas: Margherita, Truffle, Prosciutto, Quattro Formaggi ($16–$24)\n   - Seasonal risottos: Truffle & Porcini, Seafood, Wild Mushroom ($22–$34)\n   - Antipasti: Burrata, Bruschetta, Arancini ($12–$18)\n   - Desserts: Tiramisu, Panna Cotta, Cannoli ($8–$12)\n   - We have excellent vegetarian and gluten-free options\n\n5. PRICING\n   - Starters: $12–$18\n   - Pasta: $18–$28\n   - Pizza: $16–$24\n   - Mains: $22–$34\n   - Desserts: $8–$12\n   - 3-course set menu: $55 per person (available Mon–Thu)\n\n6. ADDITIONAL INFO\n   - Dress code: Smart casual\n   - We cater for dietary requirements — please mention when booking\n   - Gift vouchers available\n   - Corkage fee: $15 per bottle if bringing your own wine\n\nCOMMUNICATION STYLE:\n- Always be warm, friendly and conversational — like a knowledgeable maître d'\n- Keep responses concise — 2–4 sentences maximum unless they need detail\n- Use light Italian touches naturally (e.g. 'Ciao!' 'Perfetto!' 'Grazie!')\n- If asked something you genuinely don't know, say: 'That's a great question — let me connect you with our team! You can reach us at (555) 014-2233 or pop in and speak with us directly.'\n- Never make up information about dishes, prices, or policies\n- Always end with a gentle follow-up or invitation to visit"
+            },
+            {
+              "type": "user",
+              "message": "={{ $json.userMessage }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 300,
+          "temperature": 0.7
+        }
+      },
+      "id": "openai-node",
+      "name": "OpenAI — Sofia",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": {
+        "openAiApi": {
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"reply\": \"{{ $json.message.content }}\",\n  \"sessionId\": \"{{ $('Extract Input').item.json.sessionId }}\",\n  \"business\": \"bella-italia\",\n  \"timestamp\": \"{{ $now }}\"\n}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-node",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Input": {
+      "main": [
+        [
+          {
+            "node": "OpenAI — Sofia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI — Sofia": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {}
+}

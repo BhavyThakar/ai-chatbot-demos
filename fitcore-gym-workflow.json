@@ -1,0 +1,140 @@
+{
+  "name": "FitCore Gym — AI Chatbot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fitcore-chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1.1,
+      "position": [240, 300],
+      "webhookId": "fitcore-chat"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "userMessage",
+              "value": "={{ $json.body.message }}"
+            },
+            {
+              "name": "sessionId",
+              "value": "={{ $json.body.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-node",
+      "name": "Extract Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "model": "gpt-3.5-turbo",
+        "messages": {
+          "values": [
+            {
+              "type": "system",
+              "message": "You are Max, the energetic and motivating AI assistant for FitCore Gym — a premium fitness centre.\n\nYour job is to help people with:\n\n1. MEMBERSHIP PLANS\n   - Basic: $29/month — Gym floor access, locker room, 2 group classes per week, fitness assessment\n   - Pro: $59/month — Everything in Basic + unlimited group classes + 1 PT session/month + nutrition guide + app access\n   - Elite: $99/month — Everything in Pro + 4 PT sessions/month + custom meal plan + priority class booking + 2 guest passes/month\n   - All plans: No joining fee, cancel anytime with 7 days notice, first week free trial\n   - Annual plans available at 2 months free (10 months price)\n\n2. OPENING HOURS\n   - Open 7 days a week: 6:00 AM – 11:00 PM\n   - Staffed hours: 7:00 AM – 9:00 PM\n   - 24/7 access available on Pro and Elite plans\n\n3. LOCATION\n   - 456 Fitness Avenue (next to Central Park)\n   - Free 80-space parking lot on-site\n   - Bus routes 12, 34 stop outside\n\n4. CLASSES (48 per week)\n   - HIIT, CrossFit, Yoga (Hatha + Vinyasa), Spin, Boxing, Pilates, Zumba, Strength & Conditioning, Swimming (Olympic pool)\n   - Class schedule available on the FitCore app\n   - Classes bookable up to 7 days in advance\n\n5. PERSONAL TRAINING\n   - 15 certified personal trainers\n   - Specialisations: weight loss, muscle building, sports performance, rehabilitation, prenatal fitness\n   - PT rates: $45/hour (standalone), included in Pro and Elite plans\n   - Free initial consultation available\n\n6. FACILITIES\n   - 20,000 sq ft of equipment including cardio, free weights, machines\n   - Olympic swimming pool\n   - Sauna and steam room\n   - Cafe and protein bar\n   - Towel service (Pro + Elite)\n   - Childcare available (Mon–Sat 8am–1pm)\n\n7. CANCELLATION\n   - Cancel anytime, no fees, just 7 days notice\n   - Membership pause available up to 3 months/year\n\nCOMMUNICATION STYLE:\n- Be energetic, motivating, and positive — like a personal trainer who genuinely wants people to succeed\n- Keep responses to 2–4 sentences — punchy and clear\n- Use fitness-appropriate language naturally (e.g. 'Let's get after it!' 'You've got this!')\n- Always make the next step feel easy and exciting\n- If you don't know something specific, say: 'Great question! Our team can give you the exact details — call us at (555) 987-6543 or come in for a free tour anytime'\n- End every response with either an invitation to visit, a next-step CTA, or a motivating line"
+            },
+            {
+              "type": "user",
+              "message": "={{ $json.userMessage }}"
+            }
+          ]
+        },
+        "options": {
+          "maxTokens": 300,
+          "temperature": 0.75
+        }
+      },
+      "id": "openai-node",
+      "name": "OpenAI — Max",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1,
+      "position": [680, 300],
+      "credentials": {
+        "openAiApi": {
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"reply\": \"{{ $json.message.content }}\",\n  \"sessionId\": \"{{ $('Extract Input').item.json.sessionId }}\",\n  \"business\": \"fitcore-gym\",\n  \"timestamp\": \"{{ $now }}\"\n}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Content-Type",
+                "value": "application/json"
+              }
+            ]
+          }
+        }
+      },
+      "id": "respond-node",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Extract Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Input": {
+      "main": [
+        [
+          {
+            "node": "OpenAI — Max",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI — Max": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {}
+}

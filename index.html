@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bella Italia — Authentic Italian Restaurant NYC</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:    #8B0000;
+      --red2:   #A52A2A;
+      --gold:   #C9A84C;
+      --cream:  #FFF9F0;
+      --dark:   #1A0A00;
+      --gray:   #6B6B6B;
+      --border: #E8D9C0;
+    }
+
+    body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--dark); }
+
+    /* ── NAV ─────────────────────────────── */
+    nav {
+      background: var(--dark);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 72px;
+    }
+    .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); letter-spacing: 2px; }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a { color: #ccc; text-decoration: none; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; transition: color .2s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-reserve { background: var(--red); color: #fff; padding: 10px 24px; border-radius: 2px; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border: none; font-family: 'Lato', sans-serif; transition: background .2s; }
+    .nav-reserve:hover { background: var(--red2); }
+
+    /* ── HERO ────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, #1A0A00 0%, #3D1A00 50%, #1A0A00 100%);
+      min-height: 520px; display: flex; align-items: center; justify-content: center;
+      flex-direction: column; text-align: center; padding: 80px 24px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(201,168,76,.03) 40px, rgba(201,168,76,.03) 80px);
+    }
+    .hero-eyebrow { color: var(--gold); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 20px; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(42px, 6vw, 72px); color: #fff; line-height: 1.1; margin-bottom: 20px; }
+    .hero h1 em { color: var(--gold); font-style: italic; }
+    .hero p { color: #c0b090; font-size: 16px; max-width: 480px; line-height: 1.7; margin-bottom: 36px; }
+    .hero-btns { display: flex; gap: 16px; }
+    .btn-primary { background: var(--red); color: #fff; padding: 14px 36px; border: none; border-radius: 2px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; font-family: 'Lato', sans-serif; transition: all .2s; }
+    .btn-primary:hover { background: var(--red2); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--gold); padding: 14px 36px; border: 1px solid var(--gold); border-radius: 2px; font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; font-family: 'Lato', sans-serif; transition: all .2s; }
+    .btn-outline:hover { background: rgba(201,168,76,.1); }
+
+    /* ── INFO STRIP ──────────────────────── */
+    .info-strip { background: var(--red); display: flex; justify-content: center; gap: 60px; padding: 20px 48px; flex-wrap: wrap; }
+    .info-item { text-align: center; color: #fff; }
+    .info-item .label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; opacity: .7; margin-bottom: 4px; }
+    .info-item .value { font-size: 14px; font-weight: 700; }
+
+    /* ── MENU SECTION ────────────────────── */
+    .section { padding: 80px 48px; max-width: 1100px; margin: 0 auto; }
+    .section-eyebrow { color: var(--gold); font-size: 11px; letter-spacing: 5px; text-transform: uppercase; margin-bottom: 12px; }
+    .section h2 { font-family: 'Playfair Display', serif; font-size: 40px; margin-bottom: 48px; }
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
+    .menu-card { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; transition: transform .2s, box-shadow .2s; }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(139,0,0,.12); }
+    .menu-card-img { height: 180px; display: flex; align-items: center; justify-content: center; font-size: 64px; }
+    .pasta-bg { background: linear-gradient(135deg, #f5e6d3, #e8c9a0); }
+    .pizza-bg { background: linear-gradient(135deg, #fde8d8, #f5c5a0); }
+    .risotto-bg { background: linear-gradient(135deg, #e8f0e0, #c8ddb8); }
+    .menu-card-body { padding: 20px; }
+    .menu-card-body h3 { font-family: 'Playfair Display', serif; font-size: 20px; margin-bottom: 8px; }
+    .menu-card-body p { color: var(--gray); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
+    .menu-card-price { color: var(--red); font-weight: 700; font-size: 16px; }
+
+    /* ── FOOTER ──────────────────────────── */
+    footer { background: var(--dark); color: #888; text-align: center; padding: 32px; font-size: 13px; }
+    footer span { color: var(--gold); }
+
+    /* ══════════════════════════════════════
+       CHAT WIDGET
+    ══════════════════════════════════════ */
+    #chat-toggle {
+      position: fixed; bottom: 28px; right: 28px; z-index: 1000;
+      width: 60px; height: 60px; border-radius: 50%;
+      background: var(--red); border: none; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(139,0,0,.45);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .2s, box-shadow .2s;
+    }
+    #chat-toggle:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(139,0,0,.55); }
+    #chat-toggle svg { width: 28px; height: 28px; fill: #fff; }
+    .chat-badge {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--gold); color: var(--dark);
+      width: 20px; height: 20px; border-radius: 50%;
+      font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+
+    #chat-window {
+      position: fixed; bottom: 104px; right: 28px; z-index: 1000;
+      width: 370px; height: 540px; border-radius: 16px;
+      background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.18);
+      display: flex; flex-direction: column; overflow: hidden;
+      transform: scale(.92) translateY(16px); opacity: 0;
+      pointer-events: none;
+      transition: transform .25s cubic-bezier(.34,1.56,.64,1), opacity .2s;
+    }
+    #chat-window.open { transform: scale(1) translateY(0); opacity: 1; pointer-events: all; }
+
+    .chat-header {
+      background: linear-gradient(135deg, var(--red), var(--red2));
+      padding: 16px 18px; display: flex; align-items: center; gap: 12px;
+    }
+    .chat-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .chat-header-info { flex: 1; }
+    .chat-header-name { color: #fff; font-weight: 700; font-size: 15px; }
+    .chat-header-status { color: rgba(255,255,255,.75); font-size: 12px; display: flex; align-items: center; gap: 5px; }
+    .status-dot { width: 7px; height: 7px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+    .chat-close { background: none; border: none; color: rgba(255,255,255,.7); cursor: pointer; font-size: 20px; padding: 4px; transition: color .2s; }
+    .chat-close:hover { color: #fff; }
+
+    .chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .msg { max-width: 82%; display: flex; flex-direction: column; gap: 4px; }
+    .msg.bot { align-self: flex-start; }
+    .msg.user { align-self: flex-end; }
+    .msg-bubble {
+      padding: 10px 14px; border-radius: 16px; font-size: 14px; line-height: 1.5;
+    }
+    .msg.bot .msg-bubble { background: #F5F5F5; color: var(--dark); border-bottom-left-radius: 4px; }
+    .msg.user .msg-bubble { background: var(--red); color: #fff; border-bottom-right-radius: 4px; }
+    .msg-time { font-size: 11px; color: #aaa; padding: 0 4px; }
+    .msg.user .msg-time { text-align: right; }
+
+    .typing-indicator { display: flex; align-items: center; gap: 4px; padding: 12px 14px; background: #F5F5F5; border-radius: 16px; border-bottom-left-radius: 4px; width: fit-content; }
+    .typing-dot { width: 7px; height: 7px; background: #bbb; border-radius: 50%; animation: typing .9s infinite; }
+    .typing-dot:nth-child(2) { animation-delay: .2s; }
+    .typing-dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes typing { 0%,80%,100%{transform:scale(1);opacity:.5} 40%{transform:scale(1.3);opacity:1} }
+
+    .quick-replies { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 16px 8px; }
+    .quick-reply {
+      background: none; border: 1px solid var(--red); color: var(--red);
+      padding: 6px 12px; border-radius: 20px; font-size: 12px; cursor: pointer;
+      font-family: 'Lato', sans-serif; transition: all .15s;
+    }
+    .quick-reply:hover { background: var(--red); color: #fff; }
+
+    .chat-input-area {
+      padding: 12px 16px; border-top: 1px solid #f0f0f0;
+      display: flex; gap: 8px; align-items: flex-end;
+    }
+    .chat-input {
+      flex: 1; border: 1.5px solid #e8e8e8; border-radius: 22px;
+      padding: 10px 16px; font-size: 14px; font-family: 'Lato', sans-serif;
+      outline: none; resize: none; max-height: 80px; line-height: 1.4;
+      transition: border-color .2s;
+    }
+    .chat-input:focus { border-color: var(--red); }
+    .send-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--red); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all .2s;
+    }
+    .send-btn:hover { background: var(--red2); transform: scale(1.05); }
+    .send-btn svg { width: 18px; height: 18px; fill: #fff; }
+    .send-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+    .chat-footer-note { text-align: center; font-size: 10px; color: #bbb; padding: 6px 0 10px; letter-spacing: .3px; }
+
+    @media(max-width:480px) {
+      #chat-window { width: calc(100vw - 20px); right: 10px; bottom: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">✦ BELLA ITALIA</div>
+  <div class="nav-links">
+    <a href="#">Menu</a>
+    <a href="#">About</a>
+    <a href="#">Reservations</a>
+    <a href="#">Contact</a>
+  </div>
+  <button class="nav-reserve">Reserve a Table</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">Est. 1987 · Little Italy, Manhattan</div>
+  <h1>Authentic Italian<br/><em>Tradition & Taste</em></h1>
+  <p>Three generations of family recipes, handmade pasta, and the warmth of a true Italian kitchen — right in the heart of New York City.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Reserve a Table</button>
+    <button class="btn-outline">View Full Menu</button>
+  </div>
+</section>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <div class="info-item"><div class="label">Location</div><div class="value">123 Mulberry St, Manhattan</div></div>
+  <div class="info-item"><div class="label">Hours Today</div><div class="value">11:00 AM – 10:00 PM</div></div>
+  <div class="info-item"><div class="label">Reservations</div><div class="value">(555) 014-2233</div></div>
+  <div class="info-item"><div class="label">Dress Code</div><div class="value">Smart Casual</div></div>
+</div>
+
+<!-- MENU SECTION -->
+<div class="section">
+  <div class="section-eyebrow">Our Specialities</div>
+  <h2>From Our Kitchen</h2>
+  <div class="menu-grid">
+    <div class="menu-card">
+      <div class="menu-card-img pasta-bg">🍝</div>
+      <div class="menu-card-body">
+        <h3>Handmade Pasta</h3>
+        <p>Fresh pasta crafted daily — tagliatelle al ragù, cacio e pepe, and seasonal specials.</p>
+        <div class="menu-card-price">From $18</div>
+      </div>
+    </div>
+    <div class="menu-card">
+      <div class="menu-card-img pizza-bg">🍕</div>
+      <div class="menu-card-body">
+        <h3>Wood-Fired Pizza</h3>
+        <p>Neapolitan-style pizzas with San Marzano tomatoes and fior di latte mozzarella.</p>
+        <div class="menu-card-price">From $16</div>
+      </div>
+    </div>
+    <div class="menu-card">
+      <div class="menu-card-img risotto-bg">🌿</div>
+      <div class="menu-card-body">
+        <h3>Seasonal Risotto</h3>
+        <p>Slow-stirred Carnaroli rice with truffle, wild mushroom, or fresh seafood.</p>
+        <div class="menu-card-price">From $24</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 <span>Bella Italia</span> · 123 Mulberry St, Manhattan · (555) 014-2233</p>
+  <p style="margin-top:8px;font-size:11px;">AI Chatbot powered by <span>Sofia AI</span> — Built by bhavythakar129 on Fiverr</p>
+</footer>
+
+<!-- ══ CHAT TOGGLE BUTTON ══ -->
+<button id="chat-toggle" onclick="toggleChat()">
+  <div class="chat-badge">1</div>
+  <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+</button>
+
+<!-- ══ CHAT WINDOW ══ -->
+<div id="chat-window">
+  <div class="chat-header">
+    <div class="chat-avatar">🍝</div>
+    <div class="chat-header-info">
+      <div class="chat-header-name">Sofia — Bella Italia</div>
+      <div class="chat-header-status"><span class="status-dot"></span> Online — replies instantly</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+
+  <div class="chat-messages" id="messages"></div>
+
+  <div class="quick-replies" id="quick-replies">
+    <button class="quick-reply" onclick="sendQuick('What are your opening hours?')">🕐 Hours</button>
+    <button class="quick-reply" onclick="sendQuick('How do I make a reservation?')">📅 Reserve</button>
+    <button class="quick-reply" onclick="sendQuick('What\'s on the menu?')">🍽️ Menu</button>
+    <button class="quick-reply" onclick="sendQuick('Where are you located?')">📍 Location</button>
+  </div>
+
+  <div class="chat-input-area">
+    <textarea class="chat-input" id="chat-input" placeholder="Ask Sofia anything…" rows="1"
+      onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+    <button class="send-btn" id="send-btn" onclick="sendMessage()">
+      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+    </button>
+  </div>
+  <div class="chat-footer-note">Powered by Sofia AI · Bella Italia</div>
+</div>
+
+<script>
+  // ── CONFIG ──────────────────────────────────────────────
+  // Replace this URL with your actual n8n webhook URL after setup
+  // For demo/portfolio purposes, this uses a local mock response
+  const N8N_WEBHOOK_URL = 'YOUR_N8N_WEBHOOK_URL_HERE';
+  const USE_DEMO_MODE = true; // Set to false when you have real n8n webhook
+
+  // ── DEMO RESPONSES (used when USE_DEMO_MODE = true) ─────
+  const demoResponses = {
+    default: [
+      "That's a great question! Let me help you with that. 😊",
+      "Thanks for reaching out to Bella Italia! How can I help you further?",
+      "Is there anything else you'd like to know about our restaurant?"
+    ],
+    hours: "We're open Monday to Thursday 11am–10pm, Friday & Saturday 11am–11pm, and Sunday 12pm–9pm. 🕐 We'd love to have you!",
+    reservation: "You can reserve a table by calling us at (555) 014-2233, or I can note your preferred date and time and our team will confirm! 📅 How many guests and what date were you thinking?",
+    menu: "Our menu features handmade pasta from $18, wood-fired pizzas from $16, and seasonal risottos from $24. We also have amazing tiramisu! 🍝 Would you like details on any specific dish?",
+    location: "We're at 123 Mulberry Street, Manhattan — right in the heart of Little Italy! 📍 We're a 5-minute walk from the Canal Street subway station.",
+    vegetarian: "Absolutely! We have a wonderful selection of vegetarian options including our Cacio e Pepe pasta, Margherita pizza, mushroom risotto, and seasonal vegetable antipasti. 🌿",
+    parking: "There's a public parking garage on Baxter Street just 2 minutes away. Street parking is also available in the area. 🚗",
+    price: "Our pasta dishes start from $18, pizzas from $16, risottos from $24, and desserts from $8. Mains range from $18–$34. We also have a 3-course set menu for $55. 💰",
+  };
+
+  function getDemoResponse(message) {
+    const msg = message.toLowerCase();
+    if (msg.includes('hour') || msg.includes('open') || msg.includes('close') || msg.includes('time')) return demoResponses.hours;
+    if (msg.includes('reserv') || msg.includes('book') || msg.includes('table')) return demoResponses.reservation;
+    if (msg.includes('menu') || msg.includes('food') || msg.includes('dish') || msg.includes('eat')) return demoResponses.menu;
+    if (msg.includes('locat') || msg.includes('where') || msg.includes('address') || msg.includes('find')) return demoResponses.location;
+    if (msg.includes('vegetar') || msg.includes('vegan') || msg.includes('plant')) return demoResponses.vegetarian;
+    if (msg.includes('park')) return demoResponses.parking;
+    if (msg.includes('price') || msg.includes('cost') || msg.includes('much') || msg.includes('cheap') || msg.includes('expens')) return demoResponses.price;
+    return demoResponses.default[Math.floor(Math.random() * demoResponses.default.length)];
+  }
+
+  // ── STATE ────────────────────────────────────────────────
+  let isOpen = false;
+  let isTyping = false;
+  const sessionId = 'session_' + Date.now();
+
+  // ── INIT ─────────────────────────────────────────────────
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      addBotMessage("Ciao! 👋 I'm Sofia, Bella Italia's AI assistant. I can help you with our menu, hours, reservations, and more. How can I help you today?");
+    }, 600);
+  });
+
+  // ── TOGGLE ───────────────────────────────────────────────
+  function toggleChat() {
+    isOpen = !isOpen;
+    document.getElementById('chat-window').classList.toggle('open', isOpen);
+    if (isOpen) {
+      document.querySelector('.chat-badge').style.display = 'none';
+      setTimeout(() => document.getElementById('chat-input').focus(), 300);
+    }
+  }
+
+  // ── MESSAGES ─────────────────────────────────────────────
+  function getTime() {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function addBotMessage(text) {
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'msg bot';
+    div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${getTime()}</div>`;
+    container.appendChild(div);
+    scrollBottom();
+  }
+
+  function addUserMessage(text) {
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'msg user';
+    div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${getTime()}</div>`;
+    container.appendChild(div);
+    scrollBottom();
+  }
+
+  function showTyping() {
+    const container = document.getElementById('messages');
+    const div = document.createElement('div');
+    div.className = 'msg bot'; div.id = 'typing';
+    div.innerHTML = `<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+    container.appendChild(div);
+    scrollBottom();
+  }
+
+  function hideTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  function scrollBottom() {
+    const c = document.getElementById('messages');
+    c.scrollTop = c.scrollHeight;
+  }
+
+  // ── SEND ─────────────────────────────────────────────────
+  async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text || isTyping) return;
+
+    input.value = '';
+    autoResize(input);
+    document.getElementById('quick-replies').style.display = 'none';
+    addUserMessage(text);
+    isTyping = true;
+    document.getElementById('send-btn').disabled = true;
+
+    await new Promise(r => setTimeout(r, 600));
+    showTyping();
+
+    try {
+      let reply;
+      if (USE_DEMO_MODE) {
+        await new Promise(r => setTimeout(r, 800 + Math.random() * 700));
+        reply = getDemoResponse(text);
+      } else {
+        const res = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, sessionId, business: 'bella-italia' })
+        });
+        const data = await res.json();
+        reply = data.reply || data.text || data.message || "Sorry, I didn't catch that. Could you rephrase?";
+      }
+      hideTyping();
+      addBotMessage(reply);
+    } catch (e) {
+      hideTyping();
+      addBotMessage("Sorry, I'm having a little trouble right now. Please call us at (555) 014-2233! 📞");
+    }
+
+    isTyping = false;
+    document.getElementById('send-btn').disabled = false;
+    input.focus();
+  }
+
+  function sendQuick(text) {
+    document.getElementById('chat-input').value = text;
+    sendMessage();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+  }
+</script>
+</body>
+</html>
